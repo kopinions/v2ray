@@ -1,10 +1,42 @@
 {
   "log": {
-    "loglevel": "warning",
+    "loglevel": "debug",
     "access": "/var/log/v2ray/access.log",
     "error": "/var/log/v2ray/error.log"
   },
+  "dns": {
+    "hosts": {
+      "geosite:category-ads-all": "127.0.0.1"
+    },
+    "servers": [
+      {
+        "address": "8.8.8.8",
+        "port": 53,
+        "domains": [
+          "geosite:geolocation-!cn"
+        ]
+      },
+      {
+        "address": "114.114.114.114",
+        "port": 53,
+        "domains": [
+          "geosite:cn"
+        ]
+      },
+      "localhost"
+    ]
+  },
   "inbounds": [
+    {
+      "port": 53,
+      "tag": "dns-in",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "8.8.8.8",
+        "port": 53,
+        "network": "tcp,udp"
+      }
+    },
     {
       "port": 1088,
       "protocol": "socks",
@@ -13,7 +45,8 @@
         "destOverride": ["http", "tls"]
       },
       "settings": {
-        "auth": "noauth"
+        "auth": "noauth",
+        "udp": true
       }
     }
   ],
@@ -44,7 +77,53 @@
             "type": "none"
           }
         }
+      },
+      "tag": "proxy"
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "settings": {
+        "network": "udp",
+        "address": "8.8.8.8",
+        "port": 53
       }
     }
-  ]
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "8.8.8.8"
+        ],
+        "outboundTag": "proxy"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:cn"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "114.114.114.114"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["dns-in"],
+        "outboundTag": "dns-out"
+      }
+    ]
+  }
 }
