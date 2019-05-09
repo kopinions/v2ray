@@ -121,6 +121,14 @@
       },
       {
         "type": "field",
+        "outboundTag": "direct",
+        "ip": [
+          "geoip:cn",
+          "geoip:private"
+        ]
+      },
+      {
+        "type": "field",
         "inboundTag": ["dns-in"],
         "outboundTag": "dns-out"
       }
