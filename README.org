@@ -1,0 +1,13 @@
+* V2Ray config
+** clients
+*** macos
+
+#+BEGIN_SRC shell
+docker run --privileged --restart=always -d --name v2ray -v `pwd`/clients:/etc/v2ray -p 53:53/tcp -p 53:53/udp -p 1088:1088 v2ray/official  v2ray -config=/etc/v2ray/macos.json
+#+END_SRC
+
+** servers
+
+#+BEGIN_SRC shell
+docker run -d --name v2ray -v `pwd`/servers:/etc/v2ray --net=host v2ray/official v2ray -config=/etc/v2ray/vmess.json
+#+END_SRC
