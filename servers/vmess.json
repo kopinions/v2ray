@@ -1,6 +1,6 @@
 {
   "log": {
-    "loglevel": "debug",
+    "loglevel": "warning",
     "access": "/var/log/v2ray/access.log",
     "error": "/var/log/v2ray/error.log"
   },
@@ -14,10 +14,7 @@
             "id": "d314c65c-f70f-4e1d-91fa-46821204a41a",
             "alterId": 64
           }
-        ],
-        "detour": {
-          "to": "dynamicPort"
-        }
+        ]
       },
       "streamSettings": {
         "network": "kcp",
@@ -29,24 +26,6 @@
             "type": "none"
           }
         }
-      }
-    },
-    {
-      "protocol": "vmess",
-      "port": "10000-10010",
-      "tag": "dynamicPort",
-      "settings": {
-        "default": {
-          "alterId": 64
-        }
-      },
-      "allocate": {
-        "strategy": "random",
-        "concurrency": 2,
-        "refresh": 3
-      },
-      "streamSettings": {
-        "network": "kcp"
       }
     }
   ],
