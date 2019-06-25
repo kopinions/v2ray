@@ -48,6 +48,16 @@
         "auth": "noauth",
         "udp": true
       }
+    },
+    {
+      "port": 1089,
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true
+      },
+      "settings": {
+        "allowTransparent": true
+      }
     }
   ],
   "outbounds": [
