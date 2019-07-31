@@ -1,5 +1,12 @@
 version: "3"
 services:
+  init:
+    image: certbot/certbot
+    restart: "no"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "sh -c 'certbot certonly --webroot -w /var/www/certbot --email rising.lambda@gmail.com -d v2ray.opinion.works --rsa-key-size 4096 --agree-tos --force-renewal --non-interactive'"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
