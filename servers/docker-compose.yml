@@ -1,0 +1,47 @@
+version: "3"
+services:
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    command: []
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  haproxy:
+    # replace username/repo:tag with your name and image details
+    image: haproxy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    networks:
+      - webnet
+    volumes:
+      - ./data/haproxy:/usr/local/etc/haproxy/
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: []
+  v2ray:
+    image: v2ray/official
+    restart: unless-stopped
+    ports:
+      - 10000:1088
+    networks:
+      - webnet
+    volumes:
+      - ./data/v2ray/vmess/:/etc/v2ray/
+    command: ""
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+networks:
+  webnet:
+volumes:
+  haproxy:
+  v2ray:
