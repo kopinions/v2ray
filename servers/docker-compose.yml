@@ -47,6 +47,7 @@ services:
       - webnet
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/www:/var/www/certbot
 networks:
   webnet:
 volumes:
