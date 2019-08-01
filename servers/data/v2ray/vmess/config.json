@@ -1,8 +1,6 @@
 {
   "log": {
-    "loglevel": "warning",
-    "access": "/var/log/v2ray/access.log",
-    "error": "/var/log/v2ray/error.log"
+    "loglevel": "info"
   },
   "inbounds": [
     {
@@ -26,7 +24,6 @@
       },
       "streamSettings": {
         "network": "ws",
-        "security": "tls",
         "wsSettings": {
           "path": "/v"
         }
