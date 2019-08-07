@@ -79,10 +79,16 @@
         "network": "ws",
         "security": "tls",
         "wsSettings": {
+          "headers": {
+            "host": "v.opinion.works"
+          },
           "path": "/v"
         }
       },
-      "tag": "proxy"
+      "tag": "proxy",
+      "mux": {
+        "enabled": true
+      }
     },
     {
       "tag": "direct",

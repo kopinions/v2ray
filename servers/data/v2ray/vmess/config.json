@@ -25,7 +25,10 @@
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "/v"
+          "path": "/v",
+          "headers": {
+            "host": "v.opinion.works"
+          }
         }
       }
     }
