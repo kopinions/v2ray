@@ -8,6 +8,7 @@ services:
       - "53:53/udp"
       - "1088:1088"
       - "1089:1089"
+      - "1090:1090"
     networks:
       - webnet
     volumes:

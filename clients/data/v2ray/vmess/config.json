@@ -38,6 +38,7 @@
     {
       "port": 1088,
       "protocol": "socks",
+      "tag": "vclient",
       "sniffing": {
         "enabled": true,
         "destOverride": ["http", "tls"]
@@ -45,6 +46,18 @@
       "settings": {
         "auth": "noauth",
         "udp": true
+      }
+    },
+    {
+      "port": 1090,
+      "tag": "ssclient",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
       }
     },
     {
@@ -59,6 +72,20 @@
     }
   ],
   "outbounds": [
+    {
+      "tag": "ssserver",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "s.opinion.works",
+            "method": "aes-256-gcm",
+            "password": "pa55w0rd",
+            "port": 443
+          }
+        ]
+      }
+    },
     {
       "protocol": "vmess",
       "settings": {
@@ -85,7 +112,7 @@
           "path": "/v"
         }
       },
-      "tag": "proxy",
+      "tag": "vserver",
       "mux": {
         "enabled": true
       }
@@ -113,7 +140,7 @@
         "ip": [
           "8.8.8.8"
         ],
-        "outboundTag": "proxy"
+        "outboundTag": "vserver"
       },
       {
         "type": "field",
@@ -141,6 +168,16 @@
         "type": "field",
         "inboundTag": ["dns-in"],
         "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["ssclient"],
+        "outboundTag": "ssserver"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["vclient"],
+        "outboundTag": "vserver"
       }
     ]
   }
