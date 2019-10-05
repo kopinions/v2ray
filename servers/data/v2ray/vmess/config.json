@@ -5,6 +5,14 @@
   "inbounds": [
     {
       "port": 80,
+      "protocol": "shadowsocks",
+      "settings": {
+        "method": "aes-128-gcm",
+        "password": "Pa$$w0rd"
+      }
+    },
+    {
+      "port": 80,
       "protocol": "vmess",
       "settings": {
         "clients": [
