@@ -62,6 +62,7 @@
     },
     {
       "port": 1089,
+      "tag": "vclient_http",
       "protocol": "http",
       "sniffing": {
         "enabled": true
@@ -177,6 +178,11 @@
       {
         "type": "field",
         "inboundTag": ["vclient"],
+        "outboundTag": "vserver"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["vclient_http"],
         "outboundTag": "vserver"
       }
     ]
