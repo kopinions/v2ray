@@ -6,10 +6,10 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-      - ./data/certbot/scripts:/bin
+      - ./data/certbot/scripts:/bin/scripts
     environment:
       DOMAINS: "v.opinion.works:s.opinion.work:opinion.works"
-    entrypoint: "/bin/initialize"
+    entrypoint: "/bin/scripts/initialize"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -17,8 +17,8 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-      - ./data/certbot/scripts:/bin
-    entrypoint: "/bin/refresh"
+      - ./data/certbot/scripts:/bin/scripts
+    entrypoint: "/bin/scripts/refresh"
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
