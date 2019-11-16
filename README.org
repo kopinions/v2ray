@@ -1,4 +1,15 @@
 * V2Ray config
+
+** install docker under linux
+#+BEGIN_SRC shell
+sudo yum install -y docker
+sudo service docker start
+#+END_SRC
+** install docker compose
+#+BEGIN_SRC shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+sudo chmod +x /usr/bin/docker-compose
+#+END_SRC
 ** clients
 *** macos
 
