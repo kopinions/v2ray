@@ -9,7 +9,7 @@ services:
       - ./data/certbot/scripts:/bin
     environment:
       DOMAINS: "v.opinion.works:s.opinion.work:opinion.works"
-    entrypoint: "/bin/entrypoint"
+    entrypoint: "/bin/initialize"
   certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -17,8 +17,8 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    - ./data/certbot/scripts:/bin
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew && find /etc/letsencrypt/live \( -name 'fullchain.pem' -o  -name 'privkey.pem' \) -exec cat {} \; > /etc/letsencrypt/haproxy.pem ; sleep 12h & wait $${!}; done;'"
+      - ./data/certbot/scripts:/bin
+    entrypoint: "/bin/refresh"
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
