@@ -8,7 +8,7 @@ services:
       - ./data/certbot/www:/var/www/certbot
       - ./data/certbot/scripts:/bin/scripts
     environment:
-      DOMAINS: "v.opinion.works:s.opinion.work"
+      DOMAINS: "v.opinion.works:s.opinion.works"
       EMAIL: "rising.lambda@gmail.com"
     entrypoint: "/bin/scripts/initialize"
   certbot:
