@@ -4,6 +4,11 @@
 #+BEGIN_SRC shell
 sudo yum install -y docker
 sudo service docker start
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo gpasswd -a $USER docker
+sudo setfacl -m user:$USER:rw /var/run/docker.sock
+
 #+END_SRC
 ** install docker compose
 #+BEGIN_SRC shell
@@ -19,6 +24,12 @@ docker run --privileged --restart=always -d --name v2ray -v `pwd`/clients:/etc/v
 
 ** servers
 
+*** 前提条件
+1. 需要打开 80 端口
+2. 需要安装 git
+
+
+*** 启动 server
 #+BEGIN_SRC shell
-docker run -d --name v2ray -v `pwd`/servers:/etc/v2ray --net=host v2ray/official v2ray -config=/etc/v2ray/vmess.json
+docker-compose up -d
 #+END_SRC
