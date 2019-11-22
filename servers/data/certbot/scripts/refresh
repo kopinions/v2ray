@@ -2,6 +2,5 @@
 trap exit TERM;
 while :; do
     certbot renew && find /etc/letsencrypt/live \( -name 'fullchain.pem' -o  -name 'privkey.pem' \) -exec cat {} \; > /etc/letsencrypt/haproxy.pem;
-    sleep 12h &
-    wait $${!};
+    sleep 12h & wait $!;
 done;
