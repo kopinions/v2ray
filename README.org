@@ -16,20 +16,19 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-
 sudo chmod +x /usr/bin/docker-compose
 #+END_SRC
 ** clients
-*** macos
-
 #+BEGIN_SRC shell
-docker run --privileged --restart=always -d --name v2ray -v `pwd`/clients:/etc/v2ray -p 53:53/tcp -p 53:53/udp -p 1088:1088 v2ray/official  v2ray -config=/etc/v2ray/macos.json
+cd clients
+docker-compose up -d
 #+END_SRC
 
 ** servers
-
 *** 前提条件
-1. 需要打开 80 端口
+1. 需要打开 80 端口（应为需要 letsencrypt）
+2. 将对应域名映射到服务器 IP 上
 2. 需要安装 git
-
 
 *** 启动 server
 #+BEGIN_SRC shell
+cd servers
 docker-compose up -d
 #+END_SRC
