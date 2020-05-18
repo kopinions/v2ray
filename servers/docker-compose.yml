@@ -8,9 +8,13 @@ services:
       - ./data/certbot/www:/var/www/certbot
       - ./data/certbot/scripts:/bin/scripts
     environment:
-      DOMAINS: "v.opinion.works:s.opinion.works"
+      DOMAINS: "v.opinion.works:s.opinion.works:rss.opinion.works"
       EMAIL: "rising.lambda@gmail.com"
     entrypoint: "/bin/scripts/initialize"
+  host:
+    image: alpine
+    entrypoint: /bin/sh -c "tail -f /dev/null"
+    network_mode: host
   certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -44,6 +48,8 @@ services:
   nginx:
     image: nginx
     restart: unless-stopped
+    links:
+      - host: host
     ports:
       - "80:80"
     networks:
