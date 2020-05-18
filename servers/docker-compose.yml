@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   init:
     image: certbot/certbot
@@ -11,10 +11,6 @@ services:
       DOMAINS: "v.opinion.works:s.opinion.works:rss.opinion.works"
       EMAIL: "rising.lambda@gmail.com"
     entrypoint: "/bin/scripts/initialize"
-  host:
-    image: alpine
-    entrypoint: /bin/sh -c "tail -f /dev/null"
-    network_mode: host
   certbot:
     image: certbot/certbot
     restart: unless-stopped
@@ -27,6 +23,7 @@ services:
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: unless-stopped
     ports:
       - "443:443"
@@ -47,18 +44,24 @@ services:
     command: ""
   nginx:
     image: nginx
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: unless-stopped
-    links:
-      - host: host
     ports:
       - "80:80"
     networks:
       - webnet
+      - hooked
     volumes:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/www:/var/www/certbot
+      - hooked:/etc/nginx/conf.h
 networks:
   webnet:
+    name: v2ray
+  hooked:
+    name: v2ray-hooked
 volumes:
   haproxy:
   v2ray:
+  hooked:
+    name: v2ray-hooked
