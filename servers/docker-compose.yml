@@ -54,7 +54,11 @@ services:
     volumes:
       - ./data/nginx:/etc/nginx
       - ./data/certbot/www:/var/www/certbot
-      - hooked:/etc/nginx/conf.h
+      - type: volume
+        source: hooked
+        target: /etc/nginx/conf.h
+        bind:
+          propagation: shared
 networks:
   webnet:
     name: v2ray
