@@ -43,7 +43,8 @@ services:
       - ./data/v2ray/vmess/:/etc/v2ray/
     command: ""
   nginx:
-    image: nginx
+    build: ./images/nginx
+    image: nginx:tag
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: unless-stopped
     ports:

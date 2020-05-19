@@ -1,0 +1,3 @@
+#!/bin/bash
+nginx -c /etc/nginx/nginx.conf
+inotifywait -m -r /etc/nginx/ -e modify -e move -e create -e delete -e delete_self | while read path action file; do nginx -s reload; done
