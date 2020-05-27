@@ -81,7 +81,7 @@
           {
             "address": "s.opinion.works",
             "method": "aes-256-gcm",
-            "password": "pa55w0rd",
+            "password": "Pa$$w0rd",
             "port": 443
           }
         ]

@@ -1,52 +1,43 @@
 version: "3.8"
 services:
-  init:
-    image: certbot/certbot
-    restart: "no"
+  cretbot:
+    image: certbot
+    build: ./images/certbot
+    restart: always
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-      - ./data/certbot/scripts:/bin/scripts
     environment:
       DOMAINS: "v.opinion.works:s.opinion.works:rss.opinion.works"
       EMAIL: "rising.lambda@gmail.com"
-    entrypoint: "/bin/scripts/initialize"
-  certbot:
-    image: certbot/certbot
-    restart: unless-stopped
-    command: []
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-      - ./data/certbot/scripts:/bin/scripts
-    entrypoint: "/bin/scripts/refresh"
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
+    build: ./images/haproxy
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
-    restart: unless-stopped
+    restart: always
     ports:
       - "443:443"
     networks:
       - webnet
     volumes:
+      - ./:/data
       - ./data/haproxy:/usr/local/etc/haproxy/
       - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    command: []
   v2ray:
-    image: v2ray/official
-    restart: unless-stopped
+    build: ./images/v2ray
+    image: v2ray
+    restart: always
     networks:
       - webnet
     volumes:
+      - ./:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
-    command: ""
   nginx:
     build: ./images/nginx
-    image: nginx:tag
+    image: nginx
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
-    restart: unless-stopped
+    restart: always
     ports:
       - "80:80"
     networks:

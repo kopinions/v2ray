@@ -1,0 +1,32 @@
+{
+    "log": {
+        "loglevel": "info"
+    },
+    "inbounds": [
+    {{#each services}}
+      {{#each protocols}}
+        {
+            "port": {{port}},
+            "protocol": "{{name}}"{{#if settings}},
+            "settings": 
+                {{#json settings}}{{/json}}
+            {{/if}}{{#if stream}},
+            "streamSettings": 
+                {{#json stream}}{{/json}}
+            {{/if}}
+        }
+        {{#if @last}}
+        {{else}}
+        ,
+        {{/if}}
+      {{/each}}
+    {{/each}}
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {
+            }
+        }
+    ]
+}

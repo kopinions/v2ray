@@ -1,0 +1,32 @@
+global
+        daemon
+        log stdout format raw daemon
+
+defaults
+        log global
+        mode tcp
+        option tcplog
+
+        option dontlognull
+        #maxconn 2000
+        timeout connect 24h
+        timeout client 24h
+        timeout server 24h
+
+frontend ssl
+        mode tcp
+        bind *:443 ssl crt /etc/letsencrypt/haproxy.pem
+        tcp-request inspect-delay 5s
+
+	{{#each services}}
+	{{#if default}}
+        default_backend {{name}}
+	{{else}}
+        use_backend {{name}} if { ssl_fc_sni -i {{domain}} }
+	{{/if}}
+	{{/each}}
+{{#each services}}
+backend {{name}}
+	mode tcp
+	server {{name}} {{name}}:{{port}}
+{{/each}}
