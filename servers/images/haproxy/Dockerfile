@@ -1,7 +1,7 @@
 FROM haproxy
 
 RUN apt-get update && apt-get install -y \
-    node && rm -rf /var/lib/apt/lists/*
+    nodejs npm && rm -rf /var/lib/apt/lists/*
 RUN npm install -g hbs-cli js-yaml
 COPY entrypoint /bin/entrypoint
 
