@@ -7,8 +7,8 @@ services:
       - name: shadowsocks
         port: 81
         settings:
-          method: "aes-128-gcm"
-          password: "Pa$$w0rd"
+          method: aes-256-gcm
+          password: Pa$$w0rd
   - name: v2ray
     domain: v.opinion.works
     port: 80
@@ -18,18 +18,19 @@ services:
         port: 80
         settings:
           clients:
-            - id: "d314c65c-f70f-4e1d-91fa-46821204a41a"
+            - id: d314c65c-f70f-4e1d-91fa-46821204a41a
               alterId: 64
-            - id: "7a3f4b81-ec60-4ffe-8c09-d9d21cbfb50c"
+            - id: 7a3f4b81-ec60-4ffe-8c09-d9d21cbfb50c
               alterId: 63
-            - id: "ef3452d0-e2ed-4d90-8d2c-7fce1505cf07"
+            - id: ef3452d0-e2ed-4d90-8d2c-7fce1505cf07
               alterId: 62
         stream:
           network: ws
+          security: tls
           wsSettings: 
             path: /v
             headers: 
-              host: "v.opinion.works"
+              host: v.opinion.works
   - name: nginx
     domain: v.opinion.works
     port: 80
