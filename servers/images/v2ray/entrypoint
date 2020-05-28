@@ -2,7 +2,7 @@
 set -e
 set -x
 js-yaml /data/data.yml | hbs -H /data/helper.js -i /etc/v2ray/config.json.hbs -s > /etc/v2ray/config.json   
-
+cat /etc/v2ray/config.json
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
     set -- v2ray "$@"
