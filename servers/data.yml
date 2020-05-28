@@ -1,11 +1,11 @@
 services:
   - name: ssr
     domain: s.opinion.works
-    port: 80
+    port: 81
     default: false
     protocols:
       - name: shadowsocks
-        port: 80
+        port: 81
         settings:
           method: "aes-128-gcm"
           password: "Pa$$w0rd"
@@ -25,9 +25,9 @@ services:
             - id: "ef3452d0-e2ed-4d90-8d2c-7fce1505cf07"
               alterId: 62
         stream:
-          network: ws,
+          network: ws
           wsSettings: 
-            path: /v,
+            path: /v
             headers: 
               host: "v.opinion.works"
   - name: nginx

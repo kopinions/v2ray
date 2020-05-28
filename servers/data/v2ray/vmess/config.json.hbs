@@ -4,6 +4,12 @@
     },
     "inbounds": [
     {{#each services}}
+      {{#if @first}}
+      {{else}}
+      {{#if protocols}}
+        ,
+      {{/if}}
+      {{/if}}
       {{#each protocols}}
         {
             "port": {{port}},
