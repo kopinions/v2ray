@@ -12,6 +12,6 @@ fi
 
 
 
-js-yaml /data/data.yml | hbs -i /etc/v2ray/config.json.hbs -s > /etc/v2ray/config.json   
+js-yaml /data/data.yml | hbs -H /data/helper.js -i /etc/v2ray/config.json.hbs -s > /etc/v2ray/config.json   
 
 exec "$@"
