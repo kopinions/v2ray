@@ -1,16 +1,16 @@
 #!/bin/bash
 set -e
+set -x
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
-	set -- v2ray "$@"
+    set -- v2ray "$@"
 fi
 
 if [ "$1" = 'v2ray' ]; then
-	shift 
+    shift
+    set -- v2ray "$@"
 fi
-
-
 
 js-yaml /data/data.yml | hbs -H /data/helper.js -i /etc/v2ray/config.json.hbs -s > /etc/v2ray/config.json   
 
