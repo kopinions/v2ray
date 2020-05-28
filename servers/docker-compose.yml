@@ -24,24 +24,24 @@ services:
       - ./:/data
       - ./data/haproxy:/usr/local/etc/haproxy/
       - ./data/certbot/conf:/etc/letsencrypt
-  v2ray:
+  vmess:
     build: ./images/v2ray
-    image: v2ray
+    image: vmess
     restart: always
     networks:
       - webnet
     volumes:
       - ./:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
-  ssr:
+  shadowsocks:
     build: ./images/v2ray
-    image: ssr
+    image: shadowsocks
     restart: always
     networks:
       - webnet
     volumes:
       - ./:/data
-      - ./data/v2ray/vmess/:/etc/v2ray/
+      - ./data/v2ray/shadowsocks/:/etc/v2ray/
   nginx:
     build: ./images/nginx
     image: nginx

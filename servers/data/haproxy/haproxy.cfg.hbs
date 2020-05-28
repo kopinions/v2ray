@@ -18,15 +18,17 @@ frontend ssl
         bind *:443 ssl crt /etc/letsencrypt/haproxy.pem
         tcp-request inspect-delay 5s
 
-	{{#each services}}
-	{{#if default}}
-        default_backend {{name}}
-	{{else}}
-        use_backend {{name}} if { ssl_fc_sni -i {{domain}} }
-	{{/if}}
+	{{#each protocols}}
+        use_backend {{name}} if { ssl_fc_sni -i {{server.address}} }
 	{{/each}}
-{{#each services}}
+        default_backend nginx
+
+{{#each protocols}}
 backend {{name}}
 	mode tcp
-	server {{name}} {{name}}:{{port}}
+	server {{name}} {{name}}:{{server.port}}
 {{/each}}
+
+backend nginx
+        mode tcp
+        server nginx nginx:80

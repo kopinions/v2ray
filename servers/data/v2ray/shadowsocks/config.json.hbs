@@ -1,0 +1,24 @@
+{
+    "log": {
+        "loglevel": "info"
+    },
+    "inbounds": [
+    {{#protocol "shadowsocks"}}
+        {
+            "port": {{server.port}},
+            "protocol": "{{name}},
+            "settings": {
+                "method": "{{credentials.method}}",
+                "password": "{{credentials.password}}"
+            }
+         }
+    {{/protocol}}
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {
+            }
+        }
+    ]
+}

@@ -3,30 +3,34 @@
         "loglevel": "info"
     },
     "inbounds": [
-    {{#each services}}
-      {{#if @first}}
-      {{else}}
-      {{#if protocols}}
-        ,
-      {{/if}}
-      {{/if}}
-      {{#each protocols}}
+    {{#protocol "vmess"}}
         {
-            "port": {{port}},
-            "protocol": "{{name}}"{{#if settings}},
-            "settings": 
-                {{#json settings}}{{/json}}
-            {{/if}}{{#if stream}},
-            "streamSettings": 
-                {{#json stream}}{{/json}}
-            {{/if}}
-        }
-        {{#if @last}}
-        {{else}}
-        ,
-        {{/if}}
-      {{/each}}
-    {{/each}}
+            "port": {{server.port}},
+            "protocol": "{{name}},
+            "settings": {
+                "clients": [
+                    {{#each credentials}}
+                     {
+                         "id": "{{id}}",
+                         "alterId": {{alterId}}
+                     }
+                     {{#unless @last}}
+                     ,
+                     {{/unless}}
+                    {{/each}}
+                 ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/v",
+                    "headers": {
+                        "host": "{{server.address}}"
+                    }
+                }
+            }
+         }
+    {{/protocol}}
     ],
     "outbounds": [
         {
