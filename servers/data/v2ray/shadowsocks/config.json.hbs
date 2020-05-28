@@ -3,7 +3,7 @@
         "loglevel": "info"
     },
     "inbounds": [
-    {{#protocol "shadowsocks"}}
+    {{#select protocols "shadowsocks"}}
         {
             "port": {{server.port}},
             "protocol": "{{name}},
@@ -12,7 +12,7 @@
                 "password": "{{credentials.password}}"
             }
          }
-    {{/protocol}}
+    {{/select}}
     ],
     "outbounds": [
         {

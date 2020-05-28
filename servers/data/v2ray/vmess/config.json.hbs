@@ -3,7 +3,7 @@
         "loglevel": "info"
     },
     "inbounds": [
-    {{#protocol "vmess"}}
+    {{#select protocols "vmess"}}
         {
             "port": {{server.port}},
             "protocol": "{{name}},
@@ -30,7 +30,7 @@
                 }
             }
          }
-    {{/protocol}}
+    {{/select}}
     ],
     "outbounds": [
         {
