@@ -33,6 +33,15 @@ services:
     volumes:
       - ./:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
+  ssr:
+    build: ./images/v2ray
+    image: ssr
+    restart: always
+    networks:
+      - webnet
+    volumes:
+      - ./:/data
+      - ./data/v2ray/vmess/:/etc/v2ray/
   nginx:
     build: ./images/nginx
     image: nginx

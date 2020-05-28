@@ -1,11 +1,14 @@
 services:
   - name: ssr
     domain: s.opinion.works
-    port: 81
+    port: 80
     default: false
-    credentials:
-      - method: aes-128-gcm
-        password: Pa$$w0rd
+    protocols:
+      - name: shadowsocks
+        port: 80
+        settings:
+          method: "aes-128-gcm"
+          password: "Pa$$w0rd"
   - name: v2ray
     domain: v.opinion.works
     port: 80
@@ -27,11 +30,6 @@ services:
             path: /v,
             headers: 
               host: "v.opinion.works"
-      - name: shadowsocks
-        port: 81
-        settings:
-          method: "aes-128-gcm"
-          password: "Pa$$w0rd"
   - name: nginx
     domain: v.opinion.works
     port: 80
