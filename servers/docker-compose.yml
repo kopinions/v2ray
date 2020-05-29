@@ -2,7 +2,7 @@ version: "3.8"
 services:
   cretbot:
     image: certbot
-    build: ./images/certbot
+    build: ../images/certbot
     restart: always
     volumes:
       - ../common:/data
@@ -11,7 +11,7 @@ services:
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
-    build: ./images/haproxy
+    build: ../images/haproxy
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: always
     ports:
@@ -23,7 +23,7 @@ services:
       - ./data/haproxy:/usr/local/etc/haproxy/
       - ./data/certbot/conf:/etc/letsencrypt
   vmess:
-    build: ./images/v2ray
+    build: ../images/v2ray
     image: vmess
     restart: always
     networks:
@@ -32,7 +32,7 @@ services:
       - ../common/:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
   shadowsocks:
-    build: ./images/v2ray
+    build: ../images/v2ray
     image: shadowsocks
     restart: always
     networks:
@@ -41,7 +41,7 @@ services:
       - ../common/:/data
       - ./data/v2ray/shadowsocks/:/etc/v2ray/
   nginx:
-    build: ./images/nginx
+    build: ../images/nginx
     image: nginx
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: always
