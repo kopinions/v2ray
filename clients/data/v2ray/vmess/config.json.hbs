@@ -1,0 +1,196 @@
+{
+  "log": {
+    "loglevel": "info"
+  },
+  "dns": {
+    "hosts": {
+      "geosite:category-ads-all": "127.0.0.1"
+    },
+    "servers": [
+      {
+        "address": "8.8.8.8",
+        "port": 53,
+        "domains": [
+          "geosite:geolocation-!cn"
+        ]
+      },
+      {
+        "address": "223.5.5.5",
+        "port": 53,
+        "domains": [
+          "geosite:cn"
+        ]
+      },
+      "localhost"
+    ]
+  },
+  "inbounds": [
+    {
+      "port": 53,
+      "tag": "dns-in",
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "8.8.8.8",
+        "port": 53,
+        "network": "tcp,udp"
+      }
+    },
+    {
+      "port": 1088,
+      "protocol": "socks",
+      "tag": "vclient",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      },
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 1090,
+      "tag": "ssclient",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "port": 1089,
+      "tag": "vclient_http",
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true
+      },
+      "settings": {
+        "allowTransparent": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "ssserver",
+      {{#select protocols "shadowsocks"}}
+      "protocol": "{{name}}",
+      "settings": {
+        "servers": [
+          {
+            "address": "{{server.address}}",
+            "method": "{{credentials.method}}",
+            "password": "{{credentials.password}}",
+            "port": 443
+          }
+        ]
+      }
+      {{/select}}
+    },
+    {
+      {{#select protocols "vmess"}}
+      "protocol": "{{name}}",
+      "settings": {
+        "vnext": [
+          {
+            "address": "{{server.address}}",
+            "port": 443,
+            "users": [
+            {{#each credentials}}
+              {
+                "id": "{{id}}",
+                "alterId": {{alterId}}
+              }{{#unless @last}},{{/unless}}
+            {{/each}}
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "wsSettings": {
+          "headers": {
+            "host": "server.address"
+          },
+          "path": "/v"
+        }
+      },
+      "tag": "vserver",
+      "mux": {
+        "enabled": true
+        }
+      {{/select}}
+    },
+    {
+      "tag": "direct",
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "tag": "dns-out",
+      "protocol": "dns",
+      "settings": {
+        "network": "udp",
+        "address": "8.8.8.8",
+        "port": 53
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "type": "field",
+        "ip": [
+          "8.8.8.8"
+        ],
+        "outboundTag": "vserver"
+      },
+      {
+        "type": "field",
+        "domain": [
+          "geosite:cn"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "ip": [
+          "223.5.5.5"
+        ],
+        "outboundTag": "direct"
+      },
+      {
+        "type": "field",
+        "outboundTag": "direct",
+        "ip": [
+          "geoip:cn",
+          "geoip:private"
+        ]
+      },
+      {
+        "type": "field",
+        "inboundTag": ["dns-in"],
+        "outboundTag": "dns-out"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["ssclient"],
+        "outboundTag": "ssserver"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["vclient"],
+        "outboundTag": "vserver"
+      },
+      {
+        "type": "field",
+        "inboundTag": ["vclient_http"],
+        "outboundTag": "vserver"
+      }
+    ]
+  }
+}

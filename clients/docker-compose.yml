@@ -1,8 +1,9 @@
 version: "3"
 services:
-  v2ray:
-    image: v2ray/official
-    restart: unless-stopped
+  centroid:
+    build: ../images/v2ray
+    image: centroid
+    restart: always
     ports:
       - "53:53"
       - "53:53/udp"
@@ -12,6 +13,7 @@ services:
     networks:
       - webnet
     volumes:
+      - ../common/:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
 networks:
   webnet:
