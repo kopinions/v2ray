@@ -1,0 +1,17 @@
+{
+  "name": "v2ray",
+  "version": "1.0.0",
+  "description": "v2ray config for client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "template": "js-yaml ./common/config.yml|hbs -i -s -H ./common/helper.js clients/data/v2ray/vmess/config.json.hbs > clients/data/v2ray/vmess/config.json"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "handlebars": "^4.7.6",
+    "hbs-cli": "^1.4.0",
+    "js-yaml": "^3.14.0"
+  }
+}
