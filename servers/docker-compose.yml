@@ -5,11 +5,9 @@ services:
     build: ./images/certbot
     restart: always
     volumes:
+      - ../common:/data
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    environment:
-      DOMAINS: "v.opinion.works:s.opinion.works:rss.opinion.works"
-      EMAIL: "rising.lambda@gmail.com"
   haproxy:
     # replace username/repo:tag with your name and image details
     image: haproxy
@@ -21,7 +19,7 @@ services:
     networks:
       - webnet
     volumes:
-      - ./:/data
+      - ../common:/data
       - ./data/haproxy:/usr/local/etc/haproxy/
       - ./data/certbot/conf:/etc/letsencrypt
   vmess:
@@ -31,7 +29,7 @@ services:
     networks:
       - webnet
     volumes:
-      - ./:/data
+      - ../common/:/data
       - ./data/v2ray/vmess/:/etc/v2ray/
   shadowsocks:
     build: ./images/v2ray
@@ -40,7 +38,7 @@ services:
     networks:
       - webnet
     volumes:
-      - ./:/data
+      - ../common/:/data
       - ./data/v2ray/shadowsocks/:/etc/v2ray/
   nginx:
     build: ./images/nginx

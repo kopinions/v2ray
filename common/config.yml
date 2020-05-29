@@ -1,3 +1,9 @@
+letsencrypt:
+  domains:
+    - v.opinion.works
+    - s.opinion.works
+    - rss.opinion.works
+  email: rising.lambda@gmail.com
 protocols:
   - name: shadowsocks
     credentials:

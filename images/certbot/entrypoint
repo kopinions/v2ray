@@ -1,7 +1,8 @@
 #!/bin/bash
 while ! diff <(find /etc/letsencrypt/live  -maxdepth 1 -type d -not -path /etc/letsencrypt -exec basename {} \; | sort) <(echo $DOMAINS|sed $'s/:/\\\n/g' | sort)
 do
-    DOMAIN_ARGS=$(echo $DOMAINS|sed $'s/:/\\\n/g' | awk '{printf " -d " $1}')
+    DOMAIN_ARGS=$(yq r /data/config.yml "letsencrypt.domains" |awk '{print $2}' |awk '{printf " -d " $1}')
+    EMAIL=$(yq r /data/config.yml "letsencrypt.email")
     echo "certbot certonly --test-cert --webroot -w /var/www/certbot --email ${EMAIL} ${DOMAIN_ARGS} --rsa-key-size 4096 --agree-tos --force-renewal --non-interactive" | sh -x
     sleep 60
 done
