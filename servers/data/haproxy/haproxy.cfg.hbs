@@ -17,6 +17,7 @@ frontend ssl
         mode tcp
         bind *:443 ssl crt /etc/letsencrypt/haproxy.pem
         tcp-request inspect-delay 5s
+        tcp-request content accept if { req.ssl_hello_type 1 }
 
 	{{#each protocols}}
         use_backend {{name}} if { ssl_fc_sni -i {{server.address}} }
