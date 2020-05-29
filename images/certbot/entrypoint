@@ -1,9 +1,9 @@
 #!/bin/bash
-while ! diff <(find /etc/letsencrypt/live  -maxdepth 1 -type d -not -path /etc/letsencrypt -exec basename {} \; | sort) <(echo $DOMAINS|sed $'s/:/\\\n/g' | sort)
+while ! find /etc/letsencrypt/live  -maxdepth 1 -type d -not -path /etc/letsencrypt/live
 do
-    DOMAIN_ARGS=$(yq r /data/config.yml "letsencrypt.domains" |awk '{print $2}' |awk '{printf " -d " $1}')
+    DOMAIN_ARGS=$(yq r /data/config.yml "letsencrypt.domains" |awk '{print $2}' | paste -sd, -)
     EMAIL=$(yq r /data/config.yml "letsencrypt.email")
-    echo "certbot certonly --test-cert --webroot -w /var/www/certbot --email ${EMAIL} ${DOMAIN_ARGS} --rsa-key-size 4096 --agree-tos --force-renewal --non-interactive" | sh -x
+    echo "certbot certonly --webroot -w /var/www/certbot --email ${EMAIL} -d ${DOMAIN_ARGS} --rsa-key-size 4096 --agree-tos --force-renewal --non-interactive" | sh -x
     sleep 60
 done
 
@@ -13,6 +13,6 @@ trap exit TERM;
 sleep 12h;
 
 while :; do
-    certbot renew --test-cert && find /etc/letsencrypt/live \( -name 'fullchain.pem' -o  -name 'privkey.pem' \) -exec cat {} \; > /etc/letsencrypt/haproxy.pem;
+    certbot renew && find /etc/letsencrypt/live \( -name 'fullchain.pem' -o  -name 'privkey.pem' \) -exec cat {} \; > /etc/letsencrypt/haproxy.pem;
     sleep 12h & wait $!;
 done;
