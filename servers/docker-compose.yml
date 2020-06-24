@@ -53,9 +53,10 @@ services:
       - ./data/certbot/www:/var/www/certbot
       - type: volume
         source: hooked
-        target: /etc/nginx/conf.h
+        target: /etc/nginx/apps
+        read_only: true
         bind:
-          propagation: shared
+          propagation: rslave
 networks:
   webnet:
     name: v2ray
