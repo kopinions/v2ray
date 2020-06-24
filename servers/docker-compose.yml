@@ -55,7 +55,7 @@ services:
         source: routing
         target: /etc/nginx/apps
         bind:
-          propagation: shared
+          propagation: rshared
 networks:
   webnet:
     name: v2ray
