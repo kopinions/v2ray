@@ -47,23 +47,22 @@ services:
       - "80:80"
     networks:
       - webnet
-      - hooked
+      - routing
     volumes:
       - ./data/nginx:/etc/nginx
       - ./data/certbot/www:/var/www/certbot
       - type: volume
-        source: hooked
+        source: routing
         target: /etc/nginx/apps
-        read_only: true
         bind:
-          propagation: rslave
+          propagation: shared
 networks:
   webnet:
     name: v2ray
-  hooked:
-    name: v2ray-hooked
+  routing:
+    name: routing-hooked
 volumes:
   haproxy:
   v2ray:
-  hooked:
-    name: v2ray-hooked
+  routing:
+    name: routing-hooked
