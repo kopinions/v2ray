@@ -15,10 +15,11 @@ defaults
 
 frontend ssl
         mode tcp
-        bind *:443 ssl crt /etc/letsencrypt/haproxy.pem
+        bind *:443 ssl crt /etc/letsencrypt/haproxy.pem tfo
         tcp-request inspect-delay 5s
-        tcp-request content accept if { req.ssl_hello_type 1 }
-
+	acl is_https req.payload(0,3) -m bin 160301
+	tcp-request content accept if is_https
+	use_backend nginx if is_https
 	{{#each protocols}}
         use_backend {{name}} if { ssl_fc_sni -i {{server.address}} }
 	{{/each}}
@@ -32,4 +33,4 @@ backend {{name}}
 
 backend nginx
         mode tcp
-        server nginx nginx:80
+        server nginx nginx:80 send-proxy-v2 tfo
