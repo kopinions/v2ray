@@ -41,6 +41,7 @@ frontend tls
 frontend tcp
 	mode tcp
 	bind abns@/var/run/tcp.sock accept-proxy ssl crt /etc/letsencrypt/haproxy.pem tfo
+	use_backend http if HTTP 
 	{{#each protocols}}
 	use_backend {{name}} if { ssl_fc_sni -i {{server.address}}  }
 	{{/each}}
