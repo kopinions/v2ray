@@ -25,18 +25,18 @@ frontend tcp_in
 	mode tcp
         bind *:443
         tcp-request inspect-delay 5s
-	acl is_https req.payload(0,3) -m bin 160303
-	tcp-request content accept if is_https
-	use_backend https if is_https
+	acl is_tls req.payload(0,3) -m bin 160303
+	tcp-request content accept if is_tls
+	use_backend tls if is_tls
         default_backend tcp
 
-frontend https
+frontend tls
 	mode tcp
-	bind abns@/var/run/https.sock accept-proxy ssl crt /etc/letsencrypt/haproxy.pem tfo
+	bind abns@/var/run/tls.sock accept-proxy ssl crt /etc/letsencrypt/haproxy.pem tfo
+	use_backend http if HTTP 
 	{{#each protocols}}
 	use_backend {{name}} if { ssl_fc_sni -i {{server.address}}  }
 	{{/each}}
-	default_backend http
 
 frontend tcp
 	mode tcp
@@ -49,9 +49,9 @@ backend tcp
 	mode tcp
 	server tcp abns@/var/run/tcp.sock send-proxy-v2 tfo
 
-backend https
+backend tls
         mode tcp
-	server https abns@/var/run/https.sock send-proxy-v2 tfo
+	server tls abns@/var/run/tls.sock send-proxy-v2 tfo
 
 {{#each protocols}}
 backend {{name}}
