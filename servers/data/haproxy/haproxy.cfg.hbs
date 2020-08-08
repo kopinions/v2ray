@@ -1,6 +1,11 @@
 global
-        daemon
-        log stdout format raw daemon
+	daemon
+	log stdout format raw daemon
+	ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+	ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+	# 禁用 TLS 1.2 之前的 TLS
+	ssl-default-bind-options no-sslv3 no-tlsv10 no-tlsv11
+	tune.ssl.default-dh-param 2048
 
 defaults
         log global
@@ -14,12 +19,14 @@ defaults
         timeout server 300s
 
 	http-reuse safe
+	
 
 frontend tcp_in
 	mode tcp
-        bind *:443 alpn h2,http/1.1
+        bind *:443
         tcp-request inspect-delay 5s
-	acl is_https req.payload(0,3) -m bin 160301
+	acl is_https req.payload(0,3) -m bin 160303
+	tcp-request content accept if is_https
 	use_backend https if is_https
         default_backend tcp
 
