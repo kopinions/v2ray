@@ -44,6 +44,7 @@ frontend tcp
 	{{#each protocols}}
 	use_backend {{name}} if { ssl_fc_sni -i {{server.address}}  }
 	{{/each}}
+	default_backend http
 
 backend tcp
 	mode tcp
