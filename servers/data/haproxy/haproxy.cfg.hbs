@@ -20,39 +20,16 @@ defaults
 
 	http-reuse safe
 	
-
-frontend tcp_in
-	mode tcp
-        bind *:443
-        tcp-request inspect-delay 5s
-	acl is_tls req.payload(0,3) -m bin 160303
-	tcp-request content accept if is_tls
-	use_backend tls if is_tls
-        default_backend tcp
-
-frontend tls
-	mode tcp
-	bind abns@/var/run/tls.sock accept-proxy ssl crt /etc/letsencrypt/haproxy.pem tfo
-	{{#each protocols}}
-	use_backend {{name}} if { ssl_fc_sni -i {{server.address}}  }
-	{{/each}}
-	default_backend http
-
-frontend tcp
-	mode tcp
-	bind abns@/var/run/tcp.sock accept-proxy ssl crt /etc/letsencrypt/haproxy.pem tfo
-	{{#each protocols}}
-	use_backend {{name}} if { ssl_fc_sni -i {{server.address}}  }
-	{{/each}}
-	default_backend http
-
-backend tcp
-	mode tcp
-	server tcp abns@/var/run/tcp.sock send-proxy-v2 tfo
-
-backend tls
+frontend tls_in
         mode tcp
-	server tls abns@/var/run/tls.sock send-proxy-v2 tfo
+        bind *:443 ssl crt /etc/letsencrypt/haproxy.pem tfo
+        tcp-request inspect-delay 5s
+	tcp-request content accept if HTTP
+	use_backend nginx if HTTP
+	{{#each protocols}}
+        use_backend {{name}} if { ssl_fc_sni -i {{server.address}} }
+	{{/each}}
+        default_backend nginx
 
 {{#each protocols}}
 backend {{name}}
@@ -60,6 +37,6 @@ backend {{name}}
 	server {{name}} {{name}}:{{server.port}}
 {{/each}}
 
-backend http
-	mode tcp
-	server nginx nginx:80 send-proxy-v2 tfo
+backend nginx
+        mode tcp
+        server nginx nginx:80 send-proxy-v2 tfo
