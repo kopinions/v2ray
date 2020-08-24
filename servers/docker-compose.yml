@@ -19,7 +19,7 @@ services:
       - webnet
     volumes:
       - ../common:/data
-      - ./data/haproxy:/usr/local/etc/haproxy/
+      - ./data/haproxy:/etc/haproxy/
       - ./data/certbot/conf:/etc/letsencrypt
   vmess:
     build: ../images/v2ray
