@@ -14,10 +14,13 @@ if [ "$1" = 'haproxy' ]; then
 	set -- haproxy -W -db "$@"
 fi
 
+js-yaml /data/config.yml | hbs -i /etc/haproxy/haproxy.cfg.hbs -s > /etc/haproxy/haproxy.cfg
 
-inotifywait --daemon -r /etc/haproxy /etc/letsencrypt/haproxy.pem -e modify -e move -e create -e delete -e delete_self | while read path action file;
+# trigger inotifywait to start haproxy
+sleep 10 && touch /etc/haproxy/haproxy.cfg &
+
+inotifywait -m -r /etc/haproxy /etc/letsencrypt/haproxy.pem -e modify -e move -e create -e delete -e delete_self | while read path action file;
 do
-    haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid) || true
+    haproxy -W -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid) || true
 done
 
-js-yaml /data/config.yml | hbs -i /etc/haproxy/haproxy.cfg.hbs -s > /etc/haproxy/haproxy.cfg
