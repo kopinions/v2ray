@@ -3,24 +3,24 @@ set -e
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
-	set -- haproxy "$@"
+    set -- haproxy "$@"
 fi
 
 if [ "$1" = 'haproxy' ]; then
-	shift # "haproxy"
-	# if the user wants "haproxy", let's add a couple useful flags
-	#   -W  -- "master-worker mode" (similar to the old "haproxy-systemd-wrapper"; allows for reload via "SIGUSR2")
-	#   -db -- disables background mode
-	set -- haproxy -W -db "$@"
+    shift # "haproxy"
+    # if the user wants "haproxy", let's add a couple useful flags
+    #   -W  -- "master-worker mode" (similar to the old "haproxy-systemd-wrapper"; allows for reload via "SIGUSR2")
+    #   -db -- disables background mode
+    set -- haproxy -W -db "$@"
 fi
 
+# trigger inotifywait to start haproxy
 js-yaml /data/config.yml | hbs -i /etc/haproxy/haproxy.cfg.hbs -s > /etc/haproxy/haproxy.cfg
 
-# trigger inotifywait to start haproxy
-sleep 10 && touch /etc/haproxy/haproxy.cfg &
+haproxy -W -db -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid) &
 
-inotifywait -m -r /etc/haproxy /etc/letsencrypt/haproxy.pem -e modify -e move -e create -e delete -e delete_self | while read path action file;
+inotifywait -m -r /etc/haproxy /etc/letsencrypt/haproxy.pem -e modify -e move -e create -e delete -e delete_self | while read path action file
 do
-    haproxy -W -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid) || true
+    haproxy -W -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -x /var/run/haproxy.sock -sf $(cat /var/run/haproxy.pid)
 done
 
