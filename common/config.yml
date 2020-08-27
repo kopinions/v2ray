@@ -1,8 +1,9 @@
 letsencrypt:
   domains:
-    - v.opinion.works
-    - s.opinion.works
-    - rss.opinion.works
+    - v.kopinions.com
+    - s.kopinions.com
+    - rss.kopinions.com
+    - rsshub.kopinions.com
   email: rising.lambda@gmail.com
 protocols:
   - name: shadowsocks
@@ -11,7 +12,7 @@ protocols:
       password: Pa$$w0rd
     server:
       port: 81
-      address: s.opinion.works
+      address: s.kopinions.com
     client:
   - name: vmess
     credentials:
@@ -23,4 +24,4 @@ protocols:
         alterId: 62
     server:
       port: 80
-      address: v.opinion.works
+      address: v.kopinions.com
